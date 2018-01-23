@@ -5,8 +5,13 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class Server implements Runnable{
+    private final int portNumber;
+    Server(int portNumber) {
+        this.portNumber = portNumber;
+    }
 
-        Server(int portNumber) {
+    @Override
+    public void run() {
         try (
                 ServerSocket serverSocket =
                         new ServerSocket(portNumber);
@@ -36,11 +41,6 @@ public class Server implements Runnable{
                     + portNumber + " or listening for a connection");
             System.out.println(e.getMessage());
         }
-
-    }
-
-    @Override
-    public void run() {
 
     }
 }
