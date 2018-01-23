@@ -4,7 +4,7 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class Server {
+public class Server implements Runnable{
 
         Server(int portNumber) {
         try (
@@ -22,8 +22,14 @@ public class Server {
             String inputLine;
             while ((inputLine = in.readLine()) != null) {
                 System.out.println("Client: " + inputLine);
-                out.println(stdIn.readLine());
-
+                if (inputLine.equals("Bye.")) {
+                    break;
+                }
+                String input = stdIn.readLine();
+                out.println(input);
+                if(input.equals("Bye.")) {
+                    break;
+                }
             }
         } catch (IOException e) {
             System.out.println("Exception caught when trying to listen on port "
@@ -33,4 +39,8 @@ public class Server {
 
     }
 
+    @Override
+    public void run() {
+
+    }
 }
