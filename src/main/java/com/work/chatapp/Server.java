@@ -1,10 +1,14 @@
 package com.work.chatapp;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 
 public class Server implements Runnable{
+    private Logger logger = LogManager.getLogger();
     private final int portNumber;
     Server(int portNumber) {
         this.portNumber = portNumber;
@@ -37,9 +41,11 @@ public class Server implements Runnable{
                 }
             }
         } catch (IOException e) {
-            System.out.println("Exception caught when trying to listen on port "
-                    + portNumber + " or listening for a connection");
-            System.out.println(e.getMessage());
+            StackTraceElement elements[] = e.getStackTrace();
+            for (StackTraceElement element : elements) {
+                logger.warn(element.getMethodName());
+            }
+            throw new RuntimeException(e);
         }
 
     }
