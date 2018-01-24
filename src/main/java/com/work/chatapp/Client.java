@@ -29,6 +29,7 @@ public class Client {
                                 new InputStreamReader(System.in))
         ) {
             String userInput;
+            logger.info("Connected to Server");
             while ((userInput = stdIn.readLine()) != null) {
                 out.println(userInput);
                 if (userInput.equals("Bye.")){
