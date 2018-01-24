@@ -14,17 +14,19 @@ public class Server implements Runnable{
         this.portNumber = portNumber;
     }
 
-    private Socket acceptClients(ServerSocket serverSocket) throws IOException{
-        return serverSocket.accept();
+    private void acceptClients(ServerSocket serverSocket) throws IOException{
+        while(true) {
+            Socket clientSocket = serverSocket.accept();
+            Runnable connectionHandler = new ConnectionHandler(clientSocket);
+            new Thread(connectionHandler).start();
+        }
     }
 
     @Override
     public void run() {
         try {
             ServerSocket serverSocket = new ServerSocket(portNumber);
-            Socket clientSocket = acceptClients(serverSocket);
-            Runnable connectionHandler = new ConnectionHandler(clientSocket);
-            new Thread(connectionHandler).start();
+            acceptClients(serverSocket);
         }
         catch (IOException e) {
             throw new RuntimeException(e);
