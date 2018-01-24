@@ -1,12 +1,22 @@
 package com.work.chatapp;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
 public class Client {
-
+    private Logger logger = LogManager.getLogger();
+    private String hostName;
+    private int portNumber;
     public Client(String hostName, int portNumber) {
+        this.hostName = hostName;
+        this.portNumber = portNumber;
+    }
+
+    public void startClient() {
         try (
                 Socket socket = new Socket(hostName, portNumber);
                 PrintWriter out =
@@ -35,10 +45,13 @@ public class Client {
             System.err.println("Don't know about host " + hostName);
             System.exit(1);
         } catch (IOException e) {
-            System.err.println("Couldn't get I/O for the connection to " +
-                    hostName);
-            System.exit(1);
+            StackTraceElement elements[] = e.getStackTrace();
+            for (StackTraceElement element : elements) {
+                logger.warn(element.getMethodName());
+            }
+            throw new RuntimeException(e);
         }
+
 
     }
 }
